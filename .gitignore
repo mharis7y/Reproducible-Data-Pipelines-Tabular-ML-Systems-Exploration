@@ -1,0 +1,28 @@
+# Personal & prompt files (excluded from submission repo)
+summary.md
+instructions.md
+
+# Python caches & build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Local environment & OS files
+.env
+.DS_Store
+Thumbs.db
+
+# Generated local SQLite databases (keep sql/*.sql tracked)
+*.db
+*.sqlite
+*.sqlite3
