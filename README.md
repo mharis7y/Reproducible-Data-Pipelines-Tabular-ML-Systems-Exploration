@@ -1,5 +1,7 @@
 # Reproducible Data Pipelines, Tabular ML & Systems Exploration
 
+> **Write-ups & Documentation**: [Project Write-ups & Documentation (Google Doc)](https://docs.google.com/document/d/1wccAHNu3aKxX6hXiF19ov8Lx1y56MF_EyiLIqiX162U/edit?usp=sharing)
+
 An end-to-end reproducible data engineering and tabular machine learning project built on a real-world dataset, accompanied by systems engineering exploration artifacts.
 
 ## Overview
@@ -26,6 +28,7 @@ An end-to-end reproducible data engineering and tabular machine learning project
 ├── outputs/
 │   ├── figures/         # Saved visualizations (referenced below)
 │   └── reports/         # Data-quality report, model comparison table, metrics
+├── screenshots/         # Project screenshots displayed in README
 ├── sql/                 # SQLite queries and experiments
 ├── src/                 # Cleaning, validation, features, training, and inference code
 ├── tests/               # Pytest unit tests for cleaning and validation functions
@@ -59,14 +62,21 @@ An end-to-end reproducible data engineering and tabular machine learning project
 
 ## Dataset
 
-*To be completed at Checkpoint 0.*
+Details and justification are documented in [docs/dataset_proposal.md](docs/dataset_proposal.md) and [docs/schema.md](docs/schema.md).
 
-- **Dataset Name**: _TBD_
-- **Source URL**: _TBD_
-- **Licence**: _TBD_
-- **Access Date**: _TBD_
-- **Rows / Columns**: _TBD_
-- **Prediction Target (Part B)**: _TBD_
+- **Dataset Name**: City of Chicago Building Permits (H1 2024 Operational Extract)
+- **Source Portal**: https://data.cityofchicago.org/Buildings/Building-Permits/ydr8-5enu
+- **API Endpoint**: `https://data.cityofchicago.org/resource/ydr8-5enu.csv`
+- **Licence**: City of Chicago Data Terms of Use — Public Open Data (https://www.chicago.gov/city/en/narr/foia/data_disclaimer.html)
+- **Access Date**: `2026-11-21`
+- **Rows / Columns**: `16,934` rows × `29` columns (`7.55 MB`)
+- **Prediction Target (Part B)**: `is_delayed` (`processing_time > 30` days — binary classification: `21.24%` delayed vs. `78.76%` on-time/fast)
+
+Reproduce the raw download and read-only audit (raw files in `data/raw/` are never edited or overwritten):
+```bash
+python src/download_data.py
+python src/inspect_raw.py
+```
 
 ## Running Part A (Data Quality & Insights Pipeline)
 
@@ -85,6 +95,10 @@ An end-to-end reproducible data engineering and tabular machine learning project
 ## Findings & Figures
 
 *To be completed after Part A and Part B outputs are generated.*
+
+## Screenshots
+
+*Checkpoint and output screenshots stored in [screenshots/](screenshots/) will be embedded here as checkpoints are completed.*
 
 ## Part C Exploration
 
