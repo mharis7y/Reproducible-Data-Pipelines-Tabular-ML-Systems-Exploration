@@ -1,0 +1,98 @@
+{
+  "input_file": "E:\\Coding\\AI Engineering\\Reproducible Data Pipelines Tabular ML Systems Exploration\\data\\raw\\chicago_building_permits_2024_h1.csv",
+  "raw_quality": {
+    "rows": 16934,
+    "columns": 29,
+    "total_cells": 491086,
+    "missing_cells": 12356,
+    "missing_pct": 2.52,
+    "exact_duplicate_rows": 0,
+    "duplicate_ids": 0,
+    "non_ascii_permit_type_rows": 10952,
+    "invalid_state_code_rows": 41,
+    "community_area_zero_sentinels": 3,
+    "ward_zero_sentinels": 3,
+    "reported_cost_placeholders_le_1": 543,
+    "reported_cost_outliers_gt_10m": 41
+  },
+  "cleaning_actions": {
+    "raw_rows": 16934,
+    "raw_cols": 29,
+    "cleaned_rows": 16934,
+    "cleaned_cols": 41,
+    "unicode_dashes_fixed": 10952,
+    "state_codes_normalized": 41,
+    "duplicates_removed": 0,
+    "community_area_sentinels_to_na": 3,
+    "ward_sentinels_to_na": 3,
+    "categorical_nulls_filled": {
+      "work_type": 5982,
+      "permit_status": 1946,
+      "permit_milestone": 1946,
+      "contact_1_type": 5,
+      "contact_1_city": 58,
+      "contact_1_state": 69
+    },
+    "total_categorical_nulls_filled": 10006,
+    "reported_cost_placeholders_flagged": 543,
+    "reported_cost_outliers_flagged": 41,
+    "reported_cost_p99_cap": 3083746.5
+  },
+  "cleaned_quality": {
+    "rows": 16934,
+    "columns": 41,
+    "total_cells": 694294,
+    "missing_cells": 6487,
+    "missing_pct": 0.93,
+    "exact_duplicate_rows": 0,
+    "duplicate_ids": 0,
+    "non_ascii_permit_type_rows": 0,
+    "invalid_state_code_rows": 0,
+    "community_area_zero_sentinels": 0,
+    "ward_zero_sentinels": 0
+  },
+  "validation": {
+    "passed": true,
+    "row_pass_rate": 1.0,
+    "min_pass_rate": 0.99,
+    "structural_passed": true,
+    "checks": {
+      "required_columns": {
+        "passed": true,
+        "expected_count": 41,
+        "missing_columns": []
+      },
+      "types": {
+        "passed": true,
+        "mismatches": {}
+      },
+      "uniqueness": {
+        "passed": true,
+        "duplicate_counts": {}
+      },
+      "nulls": {
+        "passed": true,
+        "null_counts": {}
+      },
+      "ranges_and_formats": {
+        "passed": true,
+        "total_rows": 16934,
+        "valid_rows": 16934,
+        "invalid_rows": 0,
+        "row_pass_rate": 1.0,
+        "rule_failures": {
+          "processing_time_non_negative": 0,
+          "issue_date_consistent": 0,
+          "fees_non_negative_and_reconciled": 0,
+          "reported_cost_non_negative": 0,
+          "community_area_range": 0,
+          "ward_range": 0,
+          "chicago_geo_bounds": 0,
+          "permit_type_ascii": 0,
+          "contact_1_state_format": 0,
+          "street_direction_allowed": 0
+        }
+      }
+    }
+  }
+}

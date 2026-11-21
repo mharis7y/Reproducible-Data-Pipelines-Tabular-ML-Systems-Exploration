@@ -1,0 +1,100 @@
+{
+  "input_file": "C:\\Users\\mhari\\AppData\\Local\\Temp\\tmpue018hy7\\corrupted_permits.csv",
+  "raw_quality": {
+    "rows": 16934,
+    "columns": 29,
+    "total_cells": 491086,
+    "missing_cells": 12342,
+    "missing_pct": 2.51,
+    "exact_duplicate_rows": 0,
+    "duplicate_ids": 0,
+    "non_ascii_permit_type_rows": 10952,
+    "invalid_state_code_rows": 540,
+    "community_area_zero_sentinels": 3,
+    "ward_zero_sentinels": 3,
+    "reported_cost_placeholders_le_1": 543,
+    "reported_cost_outliers_gt_10m": 41
+  },
+  "cleaning_actions": {
+    "raw_rows": 16934,
+    "raw_cols": 29,
+    "cleaned_rows": 16934,
+    "cleaned_cols": 41,
+    "unicode_dashes_fixed": 10952,
+    "state_codes_normalized": 40,
+    "duplicates_removed": 0,
+    "community_area_sentinels_to_na": 3,
+    "ward_sentinels_to_na": 3,
+    "categorical_nulls_filled": {
+      "work_type": 5982,
+      "permit_status": 1946,
+      "permit_milestone": 1946,
+      "contact_1_type": 5,
+      "contact_1_city": 58,
+      "contact_1_state": 67
+    },
+    "total_categorical_nulls_filled": 10004,
+    "reported_cost_placeholders_flagged": 543,
+    "reported_cost_outliers_flagged": 41,
+    "reported_cost_p99_cap": 3083746.5
+  },
+  "cleaned_quality": {
+    "rows": 16934,
+    "columns": 41,
+    "total_cells": 694294,
+    "missing_cells": 6975,
+    "missing_pct": 1.0,
+    "exact_duplicate_rows": 0,
+    "duplicate_ids": 0,
+    "non_ascii_permit_type_rows": 0,
+    "invalid_state_code_rows": 500,
+    "community_area_zero_sentinels": 0,
+    "ward_zero_sentinels": 0
+  },
+  "validation": {
+    "passed": false,
+    "row_pass_rate": 0.970474,
+    "min_pass_rate": 0.99,
+    "structural_passed": false,
+    "checks": {
+      "required_columns": {
+        "passed": true,
+        "expected_count": 41,
+        "missing_columns": []
+      },
+      "types": {
+        "passed": true,
+        "mismatches": {}
+      },
+      "uniqueness": {
+        "passed": true,
+        "duplicate_counts": {}
+      },
+      "nulls": {
+        "passed": false,
+        "null_counts": {
+          "is_delayed": 500
+        }
+      },
+      "ranges_and_formats": {
+        "passed": false,
+        "total_rows": 16934,
+        "valid_rows": 16434,
+        "invalid_rows": 500,
+        "row_pass_rate": 0.970474,
+        "rule_failures": {
+          "processing_time_non_negative": 500,
+          "issue_date_consistent": 500,
+          "fees_non_negative_and_reconciled": 0,
+          "reported_cost_non_negative": 0,
+          "community_area_range": 0,
+          "ward_range": 0,
+          "chicago_geo_bounds": 500,
+          "permit_type_ascii": 0,
+          "contact_1_state_format": 500,
+          "street_direction_allowed": 500
+        }
+      }
+    }
+  }
+}

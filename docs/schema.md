@@ -40,8 +40,8 @@
 | 20 | `subtotal_waived` | `float64` | `float64` | `USD` | Float `>= 0.0` | `0 (0.00%)` | Max `$110,700.00`; `0` negatives |
 | 21 | `total_fee` | `float64` | `float64` | `USD` | Float `>= 0.0` and equals `subtotal_paid + subtotal_unpaid + subtotal_waived` | `0 (0.00%)` | Max `$758,952.64`; `0` rows fail subtotal reconciliation |
 | 22 | `reported_cost` | `float64` | `float64` | `USD` | Non-negative float (flag `$0` / `<= $1` placeholder costs and extreme outliers) | `1,196 (7.06%)` | **Quality issues**: `1,196` missing; `160` rows `== 0.0`; `543` rows `<= 1.0`; `41` rows `> $10M` (max `$259M`, median `$10,640`) |
-| 23 | `community_area` | `float64` | `Int64` | `area ID` | Integer in `1..77` (or `NA` if unmapped/invalid sentinel) | `244 (1.44%)` | **Quality issue**: `78` unique values observed despite Chicago having 77 official community areas (likely sentinel `0` or out-of-range) |
-| 24 | `ward` | `float64` | `Int64` | `ward ID` | Integer in `1..50` (or `NA` if unmapped/invalid sentinel) | `244 (1.44%)` | **Quality issue**: `51` unique values observed despite Chicago having 50 official wards |
+| 23 | `community_area` | `float64` | `Int64` | `area ID` | Integer in `1..77` (or `NA` if unmapped/invalid sentinel) | `244 (1.44%)` | **Quality issue**: `78` unique raw values — `3` rows contain sentinel `0` (converted to `pd.NA` in cleaning); valid range `1..77` |
+| 24 | `ward` | `float64` | `Int64` | `ward ID` | Integer in `1..50` (or `NA` if unmapped/invalid sentinel) | `244 (1.44%)` | **Quality issue**: `51` unique raw values — `3` rows contain sentinel `0` (converted to `pd.NA` in cleaning); valid range `1..50` |
 | 25 | `contact_1_type` | `str` | `category` | `N/A` | Standardized contact role (`19` unique) or `"UNKNOWN"` | `5 (0.03%)` | e.g., `'SELF CERT ARCHITECT'`, `'OWNER OCCUPIED'` |
 | 26 | `contact_1_city` | `str` | `string` | `N/A` | Standardized uppercase city string or `"UNKNOWN"` | `58 (0.34%)` | `462` unique cities; `0` leading/trailing whitespace issues |
 | 27 | `contact_1_state` | `str` | `category` | `N/A` | 2-letter uppercase US/territory code (`^[A-Z]{2}$`) or `"UNKNOWN"` | `69 (0.41%)` | **Quality issue**: `41` malformed entries (`'ILLINOIS'`: 39, `'IL.'`: 2); `39` raw unique values |
@@ -55,4 +55,18 @@
 3. **Missing values across key columns**: `work_type` (`5,982`, `35.33%`), `permit_status` (`1,946`, `11.49%`), `permit_milestone` (`1,946`, `11.49%`), `reported_cost` (`1,196`, `7.06%`), `latitude`/`longitude` (`333`, `1.97%`), `community_area`/`ward` (`244`, `1.44%`), `contact_1_city` (`58`, `0.34%`), `contact_1_type` (`5`, `0.03%`).
 4. **Placeholder & extreme cost outliers (`reported_cost`)**: `160` zero values, `543` values `<= $1.00`, and `41` extreme values `> $10M` up to `$259,000,000.00`.
 5. **Extreme right-skew (`processing_time`)**: Ranges from `0` (`5,466` rows) to `1,034` days (`137` rows `> 365` days; median `4.0` days).
-6. **Out-of-domain geographic IDs (`community_area`, `ward`)**: `78` distinct `community_area` values vs. 77 official areas and `51` distinct `ward` values vs. 50 official wards (to be profiled and validated in Checkpoint 2).
+6. **Out-of-domain geographic IDs (`community_area`, `ward`)**: `78` distinct `community_area` values vs. 77 official areas (`3` rows have sentinel `0`) and `51` distinct `ward` values vs. 50 official wards (`3` rows have sentinel `0`).
+
+## Auxiliary Reference Table (`data/raw/chicago_community_areas.csv`)
+
+Used in `sql/community_area_insights.sql` (`src/sql_queries.py`) to map integer `community_area` IDs (`1..77`) to official Chicago neighborhood names:
+- **Source API**: `https://data.cityofchicago.org/resource/igwz-8jzy.csv?$select=area_numbe,community&$order=area_numbe ASC`
+- **Dimensions**: `77` rows × `2` columns (`area_numbe` integer `1..77`, `community` uppercase neighborhood name).
+
+## Derived Columns Produced in Cleaned Output (`data/cleaned/chicago_building_permits_cleaned.csv`)
+
+In addition to the 29 raw columns, `src/cleaning.py` appends 12 deterministic columns (`41` total columns):
+- Calendar fields: `application_month` (`YYYY-MM`), `application_dayofweek` (`Int64`, `0=Mon..6=Sun`), `application_day_name` (`str`)
+- Missingness indicators: `reported_cost_missing` (`bool`), `coords_missing` (`bool`)
+- Vectorized target & tier fields: `is_delayed` (`Int64`, `1` if `processing_time > 30` else `0`), `processing_tier` (`str` bucket)
+- Cost outlier flags & transforms: `reported_cost_is_placeholder` (`bool`, `<= $1`), `reported_cost_outlier_flag` (`bool`, `> $10M`), `reported_cost_winsorized` (`float64`, clipped at 99th percentile `$3,083,746.50`), `log_reported_cost` (`float64`, `np.log1p`), `fee_to_cost_ratio` (`float64`, `total_fee / reported_cost` when `cost > $1`, else `NaN`).

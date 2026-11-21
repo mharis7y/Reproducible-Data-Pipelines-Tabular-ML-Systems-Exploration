@@ -19,11 +19,13 @@ import requests
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RAW_DIR = PROJECT_ROOT / "data" / "raw"
 RAW_CSV_PATH = RAW_DIR / "chicago_building_permits_2024_h1.csv"
+COMMUNITY_AREAS_CSV_PATH = RAW_DIR / "chicago_community_areas.csv"
 METADATA_PATH = RAW_DIR / "dataset_metadata.json"
 
 DATASET_NAME = "City of Chicago Building Permits (H1 2024 Extract)"
 PORTAL_URL = "https://data.cityofchicago.org/Buildings/Building-Permits/ydr8-5enu"
 API_ENDPOINT = "https://data.cityofchicago.org/resource/ydr8-5enu.csv"
+COMMUNITY_AREAS_API_ENDPOINT = "https://data.cityofchicago.org/resource/igwz-8jzy.csv"
 LICENCE_NAME = "City of Chicago Data Terms of Use (Public Open Data)"
 LICENCE_URL = "https://www.chicago.gov/city/en/narr/foia/data_disclaimer.html"
 ACCESS_DATE = "2026-11-21"
@@ -214,6 +216,66 @@ def download_raw_dataset(
     return output_csv
 
 
+def download_community_areas(
+    output_csv: Path = COMMUNITY_AREAS_CSV_PATH,
+    force: bool = False,
+) -> Path:
+    """Download the official 77-row Chicago Community Areas lookup table."""
+    if output_csv.exists() and not force:
+        print(
+            f"Community areas reference already exists at '{output_csv}'. "
+            "Preserving raw file (pass --force to re-download)."
+        )
+        return output_csv
+
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
+    params = {
+        "$select": "area_numbe,community",
+        "$order": "area_numbe ASC",
+        "$limit": 200,
+    }
+    headers = {"User-Agent": "chicago-permits-reproducible-pipeline/1.0"}
+
+    last_error: Exception | None = None
+    csv_text: str | None = None
+    with requests.Session() as session:
+        for attempt in range(1, MAX_RETRIES + 1):
+            try:
+                response = session.get(
+                    COMMUNITY_AREAS_API_ENDPOINT,
+                    params=params,
+                    headers=headers,
+                    timeout=REQUEST_TIMEOUT_SEC,
+                )
+                if response.status_code >= 500:
+                    raise requests.HTTPError(
+                        f"Server error {response.status_code} fetching community areas",
+                        response=response,
+                    )
+                response.raise_for_status()
+                csv_text = response.content.decode("utf-8")
+                break
+            except (requests.RequestException, UnicodeDecodeError) as exc:
+                last_error = exc
+                if attempt < MAX_RETRIES:
+                    time.sleep(2 * attempt)
+
+    if csv_text is None:
+        raise RuntimeError(
+            f"Failed to download community areas after {MAX_RETRIES} attempts"
+        ) from last_error
+
+    temp_csv = output_csv.with_suffix(".csv.tmp")
+    temp_csv.write_text(csv_text, encoding="utf-8", newline="")
+    temp_csv.replace(output_csv)
+    row_count, col_count = verify_csv_dimensions(output_csv)
+    print(
+        f"Saved community areas reference to '{output_csv}' "
+        f"({row_count} rows x {col_count} cols)."
+    )
+    return output_csv
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     """Parse CLI arguments for raw dataset download."""
     parser = argparse.ArgumentParser(
@@ -231,6 +293,7 @@ def main(argv: list[str] | None = None) -> int:
     """CLI entrypoint for downloading the raw dataset."""
     args = parse_args(argv)
     download_raw_dataset(force=args.force)
+    download_community_areas(force=args.force)
     return 0
 
 

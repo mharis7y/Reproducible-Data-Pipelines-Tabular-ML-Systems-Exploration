@@ -1,0 +1,6 @@
+processing_tier,permit_count,median_reported_cost_usd,mean_total_fee_usd,share_pct
+Same-Day (0d),5466,4000.0,364.81,32.28
+Fast (1-7d),4464,12500.0,527.0,26.36
+Moderate (8-30d),3407,13096.5,793.04,20.12
+Delayed (31-90d),2250,22405.0,1612.66,13.29
+Severely Delayed (>90d),1347,80000.0,5456.94,7.95
