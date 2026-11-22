@@ -1,0 +1,148 @@
+{
+  "setup": {
+    "n_users": 1000,
+    "n_posts": 150000,
+    "target_user_id": 1,
+    "followed_authors": 80,
+    "n_repeats": 15,
+    "reference_time": "2026-11-22 12:00:00",
+    "candidate_window_start": "2026-11-15 12:00:00"
+  },
+  "chronological_feed": {
+    "unindexed_mean_ms": 56.2248,
+    "indexed_mean_ms": 2.4218,
+    "speedup_factor": 23.22,
+    "unindexed_query_plan": [
+      "id=5 parent=0 detail=SCAN p",
+      "id=7 parent=0 detail=SEARCH f USING COVERING INDEX sqlite_autoindex_follows_1 (follower_id=? AND followee_id=?)",
+      "id=26 parent=0 detail=USE TEMP B-TREE FOR ORDER BY"
+    ],
+    "indexed_query_plan": [
+      "id=6 parent=0 detail=SEARCH f USING COVERING INDEX idx_follows_follower (follower_id=?)",
+      "id=12 parent=0 detail=SEARCH p USING INDEX idx_posts_author_created (author_id=?)",
+      "id=31 parent=0 detail=USE TEMP B-TREE FOR ORDER BY"
+    ],
+    "top_20_post_ids": [
+      56615,
+      30860,
+      70041,
+      50721,
+      100210,
+      105885,
+      142316,
+      42384,
+      62693,
+      141223,
+      69986,
+      139798,
+      131957,
+      36736,
+      26749,
+      43940,
+      140202,
+      9315,
+      3105,
+      149389
+    ]
+  },
+  "bonus_ranked_feed_top10": {
+    "formula": "(likes + 1.0) / (age_hours + 2.0)^2 over 7-day candidate window",
+    "unindexed_mean_ms": 25.4721,
+    "indexed_mean_ms": 3.9829,
+    "cached_mean_ms": 0.000123,
+    "index_speedup_factor": 6.4,
+    "cache_speedup_factor": 207090.2,
+    "unindexed_query_plan": [
+      "id=5 parent=0 detail=SCAN p",
+      "id=9 parent=0 detail=SEARCH f USING COVERING INDEX sqlite_autoindex_follows_1 (follower_id=? AND followee_id=?)",
+      "id=49 parent=0 detail=USE TEMP B-TREE FOR ORDER BY"
+    ],
+    "indexed_query_plan": [
+      "id=6 parent=0 detail=SEARCH f USING COVERING INDEX idx_follows_follower (follower_id=?)",
+      "id=12 parent=0 detail=SEARCH p USING INDEX idx_posts_author_created (author_id=? AND created_at>?)",
+      "id=55 parent=0 detail=USE TEMP B-TREE FOR ORDER BY"
+    ],
+    "top_10_posts": [
+      {
+        "rank": 1,
+        "post_id": 87550,
+        "author_id": 97,
+        "created_at": "2026-11-22 09:42:11",
+        "likes": 255,
+        "rank_score": 13.86502
+      },
+      {
+        "rank": 2,
+        "post_id": 17811,
+        "author_id": 346,
+        "created_at": "2026-11-22 10:28:08",
+        "likes": 165,
+        "rank_score": 13.313288
+      },
+      {
+        "rank": 3,
+        "post_id": 42384,
+        "author_id": 946,
+        "created_at": "2026-11-22 11:26:10",
+        "likes": 57,
+        "rank_score": 8.82327
+      },
+      {
+        "rank": 4,
+        "post_id": 140202,
+        "author_id": 8,
+        "created_at": "2026-11-22 10:51:53",
+        "likes": 63,
+        "rank_score": 6.510704
+      },
+      {
+        "rank": 5,
+        "post_id": 69128,
+        "author_id": 8,
+        "created_at": "2026-11-22 08:58:47",
+        "likes": 151,
+        "rank_score": 6.030983
+      },
+      {
+        "rank": 6,
+        "post_id": 70041,
+        "author_id": 96,
+        "created_at": "2026-11-22 11:46:20",
+        "likes": 27,
+        "rank_score": 5.641756
+      },
+      {
+        "rank": 7,
+        "post_id": 126647,
+        "author_id": 908,
+        "created_at": "2026-11-22 10:38:47",
+        "likes": 61,
+        "rank_score": 5.512725
+      },
+      {
+        "rank": 8,
+        "post_id": 19195,
+        "author_id": 225,
+        "created_at": "2026-11-22 09:43:35",
+        "likes": 95,
+        "rank_score": 5.256313
+      },
+      {
+        "rank": 9,
+        "post_id": 96794,
+        "author_id": 129,
+        "created_at": "2026-11-22 09:41:06",
+        "likes": 94,
+        "rank_score": 5.102253
+      },
+      {
+        "rank": 10,
+        "post_id": 131957,
+        "author_id": 576,
+        "created_at": "2026-11-22 11:05:34",
+        "likes": 41,
+        "rank_score": 4.969273
+      }
+    ]
+  }
+}

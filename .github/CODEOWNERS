@@ -1,0 +1,10 @@
+# Code Owners for Branch Protection Required Reviews
+# When "Require review from Code Owners" is enabled in GitHub branch rules,
+# changes to the paths below require approval from the listed maintainer(s).
+
+*                      @mharis
+/src/                  @mharis
+/tests/                @mharis
+/sql/                  @mharis
+/docs/                 @mharis
+/.github/workflows/    @mharis

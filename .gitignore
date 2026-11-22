@@ -1,6 +1,7 @@
 # Personal & prompt files (excluded from submission repo)
 summary.md
 instructions.md
+*.docx
 
 # Python caches & build artifacts
 __pycache__/

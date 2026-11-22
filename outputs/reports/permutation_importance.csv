@@ -1,0 +1,15 @@
+feature,importance_mean,importance_std
+review_type,0.11368,0.01328
+work_type,0.08509,0.0149
+work_description,0.07943,0.00599
+permit_type,0.07444,0.01265
+contact_1_type,0.03246,0.00442
+reported_cost,0.02974,0.0041
+longitude,0.00648,0.00127
+community_area,0.00441,0.00208
+latitude,0.00418,0.00099
+street_number,0.003,0.00137
+contact_1_city,0.00236,0.00111
+contact_1_state,0.00134,0.00058
+street_direction,0.00058,0.0008
+application_dayofweek,-0.00033,0.0003

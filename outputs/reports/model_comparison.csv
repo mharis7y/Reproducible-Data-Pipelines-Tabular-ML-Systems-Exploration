@@ -1,0 +1,6 @@
+model,cv_pr_auc_mean,cv_pr_auc_std,cv_roc_auc_mean,cv_roc_auc_std,cv_f1_mean,cv_precision_mean,cv_recall_mean,cv_accuracy_mean,best_params
+Random Forest (Tuned),0.733,0.0249,0.8868,0.0204,0.6662,0.5546,0.8347,0.8277,"{""model__max_depth"": 12, ""model__min_samples_leaf"": 5}"
+HistGradientBoosting (Tuned),0.7327,0.0319,0.8868,0.0221,0.6743,0.5695,0.827,0.8354,"{""model__learning_rate"": 0.05, ""model__max_depth"": 4, ""model__min_samples_leaf"": 20}"
+Logistic Regression (Balanced),0.6868,0.0403,0.8755,0.0206,0.6618,0.5458,0.8415,0.8228,default
+"KNN (k=25, Distance)",0.6761,0.0278,0.8728,0.0156,0.636,0.6622,0.6134,0.8555,default
+Dummy (Most Frequent),0.2059,0.0085,0.5,0.0,0.0,0.0,0.0,0.7941,default
